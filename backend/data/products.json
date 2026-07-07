@@ -1,0 +1,32 @@
+[
+  {
+    "id": "p-1",
+    "name": "Audifonos Pro X1",
+    "sku": "AUD-X1",
+    "category": "Tecnologia",
+    "price": 220000,
+    "stock": 13,
+    "minStock": 6,
+    "createdAt": "2026-04-24T10:00:00.000Z"
+  },
+  {
+    "id": "p-2",
+    "name": "Mouse Ergonomico M70",
+    "sku": "MOU-M70",
+    "category": "Accesorios",
+    "price": 98000,
+    "stock": 10,
+    "minStock": 5,
+    "createdAt": "2026-04-24T10:00:00.000Z"
+  },
+  {
+    "id": "p-3",
+    "name": "Teclado Mecanico K90",
+    "sku": "KEY-K90",
+    "category": "Perifericos",
+    "price": 310000,
+    "stock": 4,
+    "minStock": 4,
+    "createdAt": "2026-04-24T10:00:00.000Z"
+  }
+]

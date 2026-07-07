@@ -1,0 +1,22 @@
+[
+  {
+    "id": "s-1",
+    "productId": "p-1",
+    "productName": "Audifonos Pro X1",
+    "quantity": 2,
+    "unitPrice": 220000,
+    "total": 440000,
+    "date": "2026-04-24",
+    "createdAt": "2026-04-24T10:05:00.000Z"
+  },
+  {
+    "id": "9143ea54-34e0-49bd-9349-1d92927ebf74",
+    "productId": "p-1",
+    "productName": "Audifonos Pro X1",
+    "quantity": 1,
+    "unitPrice": 220000,
+    "total": 220000,
+    "date": "2026-04-24",
+    "createdAt": "2026-04-24T21:10:45.676Z"
+  }
+]
