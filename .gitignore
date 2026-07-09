@@ -13,3 +13,15 @@ node_modules/
 *.key
 secrets.*
 credentials.*
+
+# SvelteKit
+/build
+/.svelte-kit
+.output
+.vercel
+.netlify
+.vscode
+Thumbs.db
+.DS_Store
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

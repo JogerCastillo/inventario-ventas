@@ -2,6 +2,8 @@
 
 ![CI](https://github.com/castiblanco/inventario_ventas/actions/workflows/ci.yml/badge.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js)
+![Svelte](https://img.shields.io/badge/svelte-%5E5-FF3E00?logo=svelte)
+![Tailwind](https://img.shields.io/badge/tailwind-v3-06B6D4?logo=tailwindcss)
 
 Sistema web para control de inventario y registro de ventas con autenticacion por roles y API REST. Disenado para despliegue sencillo y operacion diaria en negocios comerciales.
 
@@ -9,20 +11,21 @@ Sistema web para control de inventario y registro de ventas con autenticacion po
 
 | Capa | Tecnologia |
 | --- | --- |
-| Frontend | HTML, CSS, JavaScript vanilla |
+| Frontend | SvelteKit 2, Svelte 5, Tailwind CSS 3 |
 | Backend | Node.js, Express |
 | Autenticacion | JWT, bcryptjs |
 | Validacion | Zod |
 | Seguridad | Helmet, express-rate-limit |
 | Persistencia | Archivos JSON |
-| Infraestructura | Docker, Render, GitHub Actions |
+| Infraestructura | Docker, Render, Netlify, GitHub Actions |
 
 ## Funcionalidades
 
 - CRUD de productos con SKU unico.
 - Registro de ventas con actualizacion automatica de stock.
-- KPIs: ingresos totales, margen promedio, productos mas vendidos, stock minimo.
+- KPIs: ingresos totales, stock minimo, productos activos.
 - Autenticacion JWT con roles `admin` y `vendedor`.
+- Respaldo automatico a almacenamiento local cuando la API no esta disponible.
 - Rate limiting en inicio de sesion.
 - Validacion de datos en servidor con Zod.
 - Persistencia ligera en JSON (sin base de datos externa).
@@ -31,7 +34,6 @@ Sistema web para control de inventario y registro de ventas con autenticacion po
 
 - Node.js >= 18
 - npm
-- Docker y Docker Compose (opcional)
 
 ## Empezar
 
@@ -55,19 +57,15 @@ npm start
 
 La API corre en `http://localhost:4100`.
 
-### 3. Abrir el frontend
-
-Servir `index.html` desde cualquier servidor estatico o simplemente abrirlo directamente en el navegador.
-
-Para desarrollo local, editar `API_BASE_URL` en `js/app.js` para que apunte a `http://localhost:4100/api`.
-
-### Con Docker
+### 3. Iniciar el frontend
 
 ```bash
-docker compose up --build
+cd inventario_ventas
+npm install
+npm run dev
 ```
 
-Esto levanta el backend en `:4100` y un servidor Nginx con el frontend en `:8080`.
+El frontend se abre en `http://localhost:5173`. Editar la URL de la API en `src/lib/api.ts` para desarrollo local.
 
 ## Variables de entorno
 
@@ -119,7 +117,6 @@ Authorization: Bearer <token>
 | `DELETE` | `/api/products/:id` | admin |
 
 ```json
-// POST/PUT /api/products
 { "name": "Producto", "sku": "PRD001", "category": "Electronica", "price": 100, "stock": 50, "minStock": 5 }
 ```
 
@@ -131,7 +128,6 @@ Authorization: Bearer <token>
 | `POST` | `/api/sales` | admin, vendedor |
 
 ```json
-// POST /api/sales
 { "productId": "uuid", "quantity": 3, "date": "2025-06-15" }
 ```
 
@@ -139,30 +135,38 @@ Authorization: Bearer <token>
 
 ```
 inventario_ventas/
-├── index.html              # Interfaz principal
-├── css/styles.css          # Estilos
-├── js/app.js               # Logica del cliente
+├── src/                   # Codigo fuente SvelteKit
+│   ├── routes/
+│   ├── lib/
+│   │   ├── components/
+│   │   ├── api.ts
+│   │   ├── boot.ts
+│   │   ├── stores.svelte.ts
+│   │   └── types.ts
+│   ├── app.css
+│   └── app.html
+├── static/
+├── svelte.config.js
+├── vite.config.ts
+├── tailwind.config.ts
+├── netlify.toml
 ├── Dockerfile              # Contenedor para Render (backend)
-├── docker-compose.yml      # Entorno local completo
 ├── render.yaml             # Blueprint de Render
 ├── .github/workflows/ci.yml
 └── backend/
-    ├── Dockerfile          # Contenedor para docker-compose
     ├── package.json
     ├── .env.example
     ├── src/
     │   ├── server.js       # API REST
     │   └── store.js        # Persistencia en JSON
     ├── scripts/
-    │   └── smoke-test.js   # Prueba de integracion
+    │   └── smoke-test.js
     └── data/
-        ├── products.json
-        └── sales.json
 ```
 
 ## Pruebas
 
-```powershell
+```bash
 cd backend
 npm test
 ```
@@ -171,17 +175,8 @@ El CI ejecuta automaticamente el smoke test en cada push y pull request via GitH
 
 ## Despliegue
 
-- **Frontend**: Netlify o cualquier hosting estatico. La URL debe configurarse en `CORS_ORIGIN` del backend.
+- **Frontend**: Netlify (auto-detected por `netlify.toml`). La URL debe configurarse en `CORS_ORIGIN` del backend.
 - **Backend**: Render como Web Service usando `render.yaml` (blueprint). Configurar las variables de entorno en el panel de Render.
-- `CORS_ORIGIN` acepta una o varias URLs separadas por coma. En produccion usar la URL del frontend.
-
-## Seguridad
-
-- `backend/.env` no se incluye en el repositorio.
-- `backend/.env.example` documenta las variables requeridas sin exponer secretos reales.
-- Las credenciales de prueba no deben publicarse en el frontend ni en el repositorio.
-- Helmet agrega headers de seguridad HTTP.
-- Rate limiting protege el endpoint de login contra fuerza bruta.
 
 ## Licencia
 
